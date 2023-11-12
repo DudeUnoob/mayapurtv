@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Socket.IO Example</title>
+  <script src="https://mayapurtv.eu-1.evennode.com/socket.io/socket.io.js"></script>
+  <!-- <script src="/js/channels.js" type="text/javascript"></script> -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+</head>
+
+<body>
+
+  <script defer>
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const channelList = document.getElementsByClassName("channel-list")[0];
+
+      fetch('/api/v1/getChannels')
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        data.allChannels.forEach((channel, i) => {
+        let newChannelElement = document.createElement('li');
+        newChannelElement.className = "channel-item";
+
+        let newChannelButton = document.createElement("button")
+        newChannelButton.value = channel.name.replace(" ", "")
+        newChannelButton.textContent = channel.name.replace(" ", "")
+        newChannelButton.addEventListener("click", function() {
+          videoStreams(channel.stream);
+        });
+
+        newChannelElement.appendChild(newChannelButton)
+        channelList.appendChild(newChannelElement);
+      });
+    });
+      })
+
+      
+
+    let currentPlayer = null; 
+
+    function videoStreams(streamName) {
+      console.log(streamName);
+      console.log(decodeURIComponent(streamName));
+
+      if (currentPlayer) {
+        currentPlayer.destroy();
+      }
+
+      let existingPlayer = document.getElementById("player");
+      if (existingPlayer) {
+        existingPlayer.remove();
+      }
+
+      let videoPlayer = document.createElement("div");
+      videoPlayer.id = "player";
+      document.body.appendChild(videoPlayer);
+
+      currentPlayer = new Clappr.Player({
+        source: `https://video5.mayapur.tv/${decodeURIComponent(streamName)}/chunklist.m3u8`,
+        parentId: "#player"
+      });
+
+      return streamName;
+    }
+
+    const socket = io('https://mayapurtv.eu-1.evennode.com');
+
+    socket.on('connect', () => {
+      console.log('Connected to Socket.IO server');
+      const sessionId = socket.id;
+      console.log('Session ID:', sessionId);
+    });
+
+    socket.on('message', (data) => {
+      console.log('Message received:', data);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from Socket.IO server');
+    });
+
+    socket.on("viewercount", (data) => {
+      console.log(data, "viewercount");
+
+      
+      // for (let i = 0; i < channelList.children.length; i++) {
+      //   for (let elm in data) {
+      //     if (elm == channelList.children[i].textContent) {
+      //       channelList.children[i].innerHTML += ` (${data[elm]})`;
+      //     }
+      //   }
+      // }
+    });
+
+//     setInterval(() => {
+//   let channelList = document.getElementsByClassName("channel-list")[0];
+//   fetch('/api/v1/getChannels')
+//     .then(res => res.json())
+//     .then(data => {
+//       for (let i = 0; i < channelList.children.length; i++) {
+//         if (data.allChannels[i].name == channelList.children[i].textContent) {
+//         }
+//       }
+//     })
+// }, 1000);
+
+      
+  
+
+  </script>
+
+  <div id="player"></div>
+
+  <div>
+    <ul class="channel-list"></ul>
+  </div>
+</body>
+
+</html>
