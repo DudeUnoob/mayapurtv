@@ -19,6 +19,4 @@ app.get('/api/v1/getChannels', (req, res) => {
 app.get('/js/channels.js', (req, res) => {
   res.sendFile('channels.js', { root: path.join(__dirname, "./js" )})
 })
-server.listen(port, function() {
-  console.log(`Listening on port ${port}`);
-});
+server.listen(port, "192.168.86.235");

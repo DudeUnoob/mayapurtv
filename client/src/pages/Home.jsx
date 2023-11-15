@@ -14,6 +14,11 @@ function Home() {
         setIsLoading(false)
     }
 
+    setInterval(async() => {
+      const response = await apiRequest()
+      setChannelData(response.data.allChannels)
+    }, 5000)
+
     fetchData()
   }, []);
 

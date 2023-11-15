@@ -1,0 +1,19 @@
+#card-subtitle {
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+
+    .stream-card {
+        width: 100% !important;
+    }
+}
+.stream-card {
+    transition: 0.5s all;
+}
+.stream-card:hover {
+    transition: 0.5s all;
+    box-shadow: 10px 10px 30px -6px rgba(0,0,0,0.51);
+-webkit-box-shadow: 10px 10px 30px -6px rgba(0,0,0,0.51);
+-moz-box-shadow: 10px 10px 30px -6px rgba(0,0,0,0.51);
+}
