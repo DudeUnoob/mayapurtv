@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import apiRequest from '../functions/api';
 import { Spinner } from 'react-bootstrap';
 import Channels from '../components/Channels';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const [channelData, setChannelData] = useState([]);
@@ -27,8 +28,14 @@ function Home() {
      {isLoading ? (
         <Spinner animation='border' role='status'/>
      ) : (
+      <>
         <Channels channels={channelData}/>
+        <div className="footer" style={{ textAlign:"center"}}>
+      <Link to={"https://github.com/dudeunoob"} style={{ fontSize:"25px"}} target='_blank'><b>Made by me</b></Link>
+     </div>
+      </>
      )}
+     
     </>
   );
 }
